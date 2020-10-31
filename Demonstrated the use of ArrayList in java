@@ -1,0 +1,200 @@
+import java.util.ArrayList;
+
+public class Album {
+private String name;
+ private ArrayList<Songs> album;
+ private static ArrayList<Album> a;
+	private Album(String name) {
+		album=new ArrayList<Songs>();
+		this.name=name;
+		
+	}
+	
+public static void addAlbum(String name,ArrayList<Album> al)
+{
+	a=al;
+ a.add(new Album(name));
+}
+public void addSong(String name,double dur)
+{
+	album.add(new Songs(name,dur));
+}
+
+public ArrayList<Songs> getAlbum() {
+	return album;
+}
+public static ArrayList<Album> getA() {
+	return a;
+}
+
+
+}
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.ListIterator;
+import java.util.Scanner;
+
+public class Playlist {
+LinkedList<Songs> playlist=new LinkedList<Songs>();
+	public Playlist() {
+	}
+	public boolean addSong(ArrayList<Album> a,String name)
+	{
+		String nm;
+		for (int i = 0; i < a.size(); i++)
+			for (int j = 0; j < a.get(i).getAlbum().size(); j++)
+			{
+	nm=a.get(i).getAlbum().get(j).getName();
+		if(nm.equalsIgnoreCase(name))
+		{
+			playlist.add(a.get(i).getAlbum().get(j));
+			return true;
+		}
+			}
+		return false;
+	}
+	public void show()
+	{
+		Iterator<Songs> here1=playlist.iterator(),here2=playlist.iterator();
+		for (; here1.hasNext();)
+		{
+			
+			
+			System.out.println(""+here1.next().getName());
+		}
+	}
+	
+public LinkedList<Songs> getPlaylist() {
+		return playlist;
+	}
+public static void main(String[] args) {
+	ArrayList<Album> a= new ArrayList<Album>();
+	Album.addAlbum("peppi", a);
+	Album.addAlbum("Romance", a);
+	Album.addAlbum("Dance numbers", a);
+	Album.addAlbum("Rhythms", a);
+	
+		a.get(0).addSong("Yahh Yahh Yaah dude", 12.67);
+		a.get(0).addSong("yo Mama", 3.56);
+		a.get(0).addSong("Lets danceo", 8.56);
+		
+		a.get(1).addSong("Me 4 you", 2.56);
+		a.get(1).addSong("Always by your side", 3.56);
+		a.get(1).addSong("I'll miss you", 5.56);
+		
+		a.get(2).addSong("1,2,3...stand up n dance", 4.0);
+		
+		a.get(3).addSong("La la la la", 4.67);
+		
+		Playlist myPlaylist=new Playlist();
+		myPlaylist.addSong(a, "la la la la");
+		myPlaylist.addSong(a, "yo dad");
+		myPlaylist.addSong(a, "me 4 you");
+		myPlaylist.addSong(a, "1,2,3...stand up n dance");
+		myPlaylist.addSong(a, "Lets danceo");
+
+		
+		int n;
+		ListIterator<Songs> here=myPlaylist.getPlaylist().listIterator();
+		
+		
+		
+		System.out.println("Enter your choice\n1.Show PlayList\n2. Play next \n3. Play previous"
+				+ "\n4. Replay current\n5. Remove current playing song\n6. Quit");
+		Scanner in=new Scanner(System.in);
+		n=in.nextInt();
+		while(n!=6)
+		{
+			switch(n)
+			{
+			case 1:
+				myPlaylist.show();
+				break;
+			case 2:
+				if(here.hasNext())
+				{
+					System.out.println("Now Playing "+here.next().getName());
+				}
+				else
+				{
+					System.out.println("Reached end of playlist.");
+					
+				}
+				break;
+			case 3:
+				if(here.hasPrevious())
+				{
+					here.previous();
+					if(here.hasPrevious())
+					{
+						here.previous();
+						System.out.println("Now Playing "+here.next().getName());
+					}
+					else
+					{
+						System.out.println("This is the first song of the playlist.");
+					here.next();
+					}
+				}
+				else
+					System.out.println("Play the first song first.");
+				break;
+			case 4:
+				if(here.hasPrevious())
+				{
+					here.previous();
+					System.out.println("Now Playing "+here.next().getName());
+				}
+				else
+					System.out.println("Play the first song first.");
+				break;
+			case 5:
+				if(here.hasPrevious())
+				{
+				here.remove();
+				System.out.println("Song sucessfully removed");
+				if(here.hasNext())
+					System.out.println("Now playing" +here.next().getName());
+				else
+					if(here.hasPrevious())
+					System.out.println("Now playing" +here.previous().getName());
+			
+				
+				
+				}
+				else
+					System.out.println("We are at the start of the playlist.");
+				break;
+			case 6:
+				break;
+				default:
+					System.out.println("Make a correct choice");
+					break;
+					
+					
+				
+			}
+			n=in.nextInt();
+		}
+		
+		
+}
+}
+
+public class Songs {
+ private String  name;
+ private double dur;
+	public Songs(String name,double dur) {
+		this.name=name;
+		this.dur=dur;
+	}
+	public String getName() {
+		return name;
+	}
+	public double getDur() {
+		return dur;
+	}
+	
+}
+
